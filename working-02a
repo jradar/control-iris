@@ -1,0 +1,46 @@
+
+// Jon, thanks so much for you help! It's greatly appreciated. 
+// here's what I want to happen ... 
+// 01- hand motion triggers the servo to open 90 degrees as quickly as possible
+// 02- the servo waits for 5 seconds
+// 03- the servo returns to 0 position (closes the 90 degrees) a bit slower than when it opened. 
+// right now, when this code runs, the servo immediately opens, and i have to wait a little, wave my hand to trigger it, then it closes after a bit ... it runs fine after that. 
+
+#include <Servo.h>
+int servoPin=9;
+int servoPos=0;
+int servoPosOpen=90;
+Servo myServo;
+
+//collects data from an analog sensor
+int sensorPin = 0;                 // analog pin used to connect the sharp sensor
+int val = 0;                 // variable to store the values from sensor(initially zero)
+
+void setup()
+{
+  Serial.begin(9600);               // starts the serial monitor
+  myServo.attach(servoPin);
+  delay(4000);
+}
+ 
+void loop()
+{
+  // delay(4000);
+  val = analogRead(sensorPin);       // reads the value of the sharp sensor
+  Serial.println(val);            // prints the value of the sensor to the serial monitor
+  delay(400);                    // wait for this much time before printing next value
+  if (val > 250){
+  // *******
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on 
+  delay(500);                       // wait for half a second
+  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off
+  //*******
+  
+  myServo.write(servoPos); // set to 0 position // RESET POSITION
+  myServo.write(servoPosOpen);
+  delay(5000);
+  myServo.write(servoPos);
+  // myServo.detach();
+  }
+  
+}
